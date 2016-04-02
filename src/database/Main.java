@@ -10,8 +10,7 @@ public class Main {
 		} catch (ClassNotFoundException | SQLException e) {
 			e.printStackTrace();
 		}
-//		Client client = new Client(db);
-//		GUI gui = new GUI(client);
+//		GUI gui = new GUI(db);
 
 	}
 
