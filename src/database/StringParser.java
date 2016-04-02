@@ -3,12 +3,7 @@ package database;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-public class Client {
-	private Database db;
-	
-	public Client(Database db) {
-		this.db = db;
-	}
+public class StringParser {
 	
 	public boolean search(String input) {
 		if(input.isEmpty()) {
@@ -21,9 +16,5 @@ public class Client {
 			//SearchByBarcode
 		}
 		return true;
-	}
-	
-	public boolean block(LocalDateTime start, LocalDateTime end, String cookieName){
-		return false;
 	}
 }
