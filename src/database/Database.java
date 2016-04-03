@@ -20,8 +20,9 @@ public class Database {
 		cookies = new ArrayList<String>();
 	}
 	
-	/*
-	 * Connection Establishment
+	/**
+	 * Establishes connection.
+	 * @throws SQLException
 	 */
 	public void establishConnection() throws SQLException {
 		conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -30,14 +31,18 @@ public class Database {
 		}
 	}
 	
-	/*
-	 * Connection Termination
+	/**
+	 * Terminates connection.
+	 * @throws SQLException
 	 */
 	public void terminateConnection() throws SQLException {
 		conn.close();
 		System.out.println("Connection terminated.");
 	}
 	
+	/**
+	 * Fetch list of cookie names from SQL database.
+	 */
 	public void getCookies() {
 		String sql = "select cookieName from Cookies";
 		PreparedStatement ps = null;
@@ -57,6 +62,41 @@ public class Database {
 				// ... can do nothing if things go wrong here
 			}
 		}
+	}
+	
+	/**
+	 * Decides what type of search should be conducted.
+	 * @param input Search input.
+	 * @return ?
+	 */
+	public boolean search(String input) {
+		if(input.isEmpty()) {
+			return false;
+		}
+		char c = input.charAt(0);
+		if(!Character.isDigit(c)) {
+			return searchByCookie(input);
+		} else {
+			return searchByBarcode(input);
+		}
+	}
+	
+	/**
+	 * Search by cookie name.
+	 * @param input Search input.
+	 * @return
+	 */
+	private boolean searchByCookie(String input) {
+		return false;
+	}
+	
+	/**
+	 * Search by pallet bar code.
+	 * @param input Search input.
+	 * @return
+	 */
+	private boolean searchByBarcode(String input) {
+		return false;
 	}
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
