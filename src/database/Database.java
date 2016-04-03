@@ -1,6 +1,8 @@
 package database;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import database.Database;
@@ -69,22 +71,22 @@ public class Database {
 	 * @param input, Search input.
 	 * @return ?
 	 */
-//	public ResultSet search(String input) {
-//		if(input.isEmpty()) {
-//			return null;
-//		}
-//		char first = input.charAt(0);
-//		if(!Character.isDigit(first)) {
-//			for(char c : input.toCharArray()) {
-//				if(c == ',') {
-//					return searchByTime(input);
-//				}
-//			}
-//			return searchByCookie(input);
-//		} else {
-//			return searchByBarcode(input);
-//		}
-//	}
+	public ResultSet search(String input) {
+		if(input.isEmpty()) {
+			return null;
+		}
+		char first = input.charAt(0);
+		if(!Character.isDigit(first)) {
+			for(char c : input.toCharArray()) {
+				if(c == ',') {
+					return searchByTime(input);
+				}
+			}
+			return searchByCookie(input);
+		} else {
+			return searchByBarcode(input);
+		}
+	}
 	
 	/**
 	 * Search by cookie name.
@@ -117,6 +119,22 @@ public class Database {
 	 * @return
 	 */
 	private ResultSet searchByBarcode(String input) {
+		String sql = "select * from Pallets where barcode = ? order by timeProduced asc";
+		PreparedStatement ps = null;
+		try {
+			ps.setString(1, input);
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			return rs;
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+				// ... can do nothing if things go wrong here.
+			}
+		}
 		return null;
 	}
 	
@@ -126,6 +144,31 @@ public class Database {
 	 * @return
 	 */
 	private ResultSet searchByTime(String input) {
+		int i = input.indexOf(",");
+		String cookieName = input.substring(0, i-1);
+		int j = input.lastIndexOf(input);
+		String startDate = input.substring(i+1, j-1);
+		String endDate = input.substring(j+1, input.length()-1);
+		
+		String sql = "select * from Pallets where cookieName = ? and timeProduced > ? "
+				+ "and timeProduced < ? order by timeProduced asc";
+		PreparedStatement ps = null;
+		try {
+			ps.setString(1, cookieName);
+			ps.setString(2, startDate);
+			ps.setString(3, endDate);
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			return rs;
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+				// ... can do nothing if things go wrong here.
+			}
+		}
 		return null;
 	}
 	
