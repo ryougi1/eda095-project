@@ -69,22 +69,22 @@ public class Database {
 	 * @param input, Search input.
 	 * @return ?
 	 */
-//	public ResultSet search(String input) {
-//		if(input.isEmpty()) {
-//			return null;
-//		}
-//		char first = input.charAt(0);
-//		if(!Character.isDigit(first)) {
-//			for(char c : input.toCharArray()) {
-//				if(c == ',') {
-//					return searchByTime(input);
-//				}
-//			}
-//			return searchByCookie(input);
-//		} else {
-//			return searchByBarcode(input);
-//		}
-//	}
+	public ResultSet search(String input) {
+		if(input.isEmpty()) {
+			return null;
+		}
+		char first = input.charAt(0);
+		if(!Character.isDigit(first)) {
+			for(char c : input.toCharArray()) {
+				if(c == ',') {
+					return searchByTime(input);
+				}
+			}
+			return searchByCookie(input);
+		} else {
+			return searchByBarcode(input);
+		}
+	}
 	
 	/**
 	 * Search by cookie name.
@@ -92,10 +92,20 @@ public class Database {
 	 * @return
 	 */
 	private ResultSet searchByCookie(String input) {
+		String cookie = null;
+		for (String cookieName : cookies) {
+			if(cookieName.toLowerCase().contains(input.toLowerCase())) {
+				cookie = cookieName;
+				break;
+			}
+		}
+		if(cookie == null) {
+			return null;
+		}
 		String sql = "select * from Pallets where cookieName = ? order by timeProduced asc";
 		PreparedStatement ps = null;
 		try {
-			ps.setString(1, input);
+			ps.setString(1, cookie);
 			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			return rs;
