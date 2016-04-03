@@ -69,22 +69,22 @@ public class Database {
 	 * @param input, Search input.
 	 * @return ?
 	 */
-	public ResultSet search(String input) {
-		if(input.isEmpty()) {
-			return null;
-		}
-		char first = input.charAt(0);
-		if(!Character.isDigit(first)) {
-			for(char c : input.toCharArray()) {
-				if(c == ',') {
-					return searchByTime(input);
-				}
-			}
-			return searchByCookie(input);
-		} else {
-			return searchByBarcode(input);
-		}
-	}
+//	public ResultSet search(String input) {
+//		if(input.isEmpty()) {
+//			return null;
+//		}
+//		char first = input.charAt(0);
+//		if(!Character.isDigit(first)) {
+//			for(char c : input.toCharArray()) {
+//				if(c == ',') {
+//					return searchByTime(input);
+//				}
+//			}
+//			return searchByCookie(input);
+//		} else {
+//			return searchByBarcode(input);
+//		}
+//	}
 	
 	/**
 	 * Search by cookie name.
