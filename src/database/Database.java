@@ -66,15 +66,20 @@ public class Database {
 	
 	/**
 	 * Decides what type of search should be conducted.
-	 * @param input Search input.
+	 * @param input, Search input.
 	 * @return ?
 	 */
-	public boolean search(String input) {
+	public ResultSet search(String input) {
 		if(input.isEmpty()) {
-			return false;
+			return null;
 		}
-		char c = input.charAt(0);
-		if(!Character.isDigit(c)) {
+		char first = input.charAt(0);
+		if(!Character.isDigit(first)) {
+			for(char c : input.toCharArray()) {
+				if(c == ',') {
+					return searchByTime(input);
+				}
+			}
 			return searchByCookie(input);
 		} else {
 			return searchByBarcode(input);
@@ -83,7 +88,7 @@ public class Database {
 	
 	/**
 	 * Search by cookie name.
-	 * @param input Search input.
+	 * @param input, Search input.
 	 * @return
 	 */
 	private boolean searchByCookie(String input) {
@@ -92,11 +97,20 @@ public class Database {
 	
 	/**
 	 * Search by pallet bar code.
-	 * @param input Search input.
+	 * @param input, Search input.
 	 * @return
 	 */
-	private boolean searchByBarcode(String input) {
-		return false;
+	private ResultSet searchByBarcode(String input) {
+		return null;
+	}
+	
+	/**
+	 * Search by cookie name, date and time.
+	 * @param input, Search input.
+	 * @return
+	 */
+	private ResultSet searchByTime(String input) {
+		return null;
 	}
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
