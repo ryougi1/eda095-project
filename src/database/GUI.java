@@ -26,6 +26,11 @@ public class GUI extends Application{
 	public static void main(String[] args) {
 		launch(args);
 	}
+	
+//	public GUI(Database db){
+//		this.db = db;
+//		launch();
+//	}
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
