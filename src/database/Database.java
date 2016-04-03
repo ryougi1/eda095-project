@@ -59,7 +59,7 @@ public class Database {
 			try {
 				ps.close();
 			} catch (SQLException e2) {
-				// ... can do nothing if things go wrong here
+				// ... can do nothing if things go wrong here.
 			}
 		}
 	}
