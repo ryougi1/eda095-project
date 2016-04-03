@@ -82,9 +82,11 @@ public class Database {
 					return searchByTime(input);
 				}
 			}
-			return searchByCookie(input);
+			//return searchByCookie(input);
+			return null;
 		} else {
-			return searchByBarcode(input);
+//			return searchByBarcode(input);
+			return null;
 		}
 	}
 	
@@ -93,7 +95,7 @@ public class Database {
 	 * @param input, Search input.
 	 * @return
 	 */
-	private ResultSet searchByCookie(String input) {
+	private String[][] searchByCookie(String input) {
 		String cookie = null;
 		for (String cookieName : cookies) {
 			if(cookieName.toLowerCase().contains(input.toLowerCase())) {
@@ -107,10 +109,21 @@ public class Database {
 		String sql = "select * from Pallets where cookieName = ? order by timeProduced asc";
 		PreparedStatement ps = null;
 		try {
-			ps.setString(1, cookie);
 			ps = conn.prepareStatement(sql);
+			ps.setString(1, cookie);
 			ResultSet rs = ps.executeQuery();
-			return rs;
+//			rs.last();
+//			int rows = rs.getRow();
+//			rs.beforeFirst();
+			String[][] result = new String[4][4];
+			int j = 0;
+			while(rs.next()) {
+				for(int i = 1; i < 5; i++) {
+					result[j][i-1] = rs.getString(i);	
+				}
+				j++;
+			}
+			return result;
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
@@ -128,14 +141,19 @@ public class Database {
 	 * @param input, Search input.
 	 * @return
 	 */
-	private ResultSet searchByBarcode(String input) {
+	private String[][] searchByBarcode(String input) {
+		String[][] result = new String[1][4];
 		String sql = "select * from Pallets where barcode = ? order by timeProduced asc";
 		PreparedStatement ps = null;
 		try {
-			ps.setString(1, input);
 			ps = conn.prepareStatement(sql);
+			ps.setString(1, input);
 			ResultSet rs = ps.executeQuery();
-			return rs;
+			rs.next();
+			for(int i = 1; i < 5; i++) {
+				result[0][i-1] = rs.getString(i);	
+			}
+			return result;
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
@@ -156,28 +174,28 @@ public class Database {
 	private ResultSet searchByTime(String input) {
 		int i = input.indexOf(",");
 		String cookieName = input.substring(0, i-1);
-		int j = input.lastIndexOf(input);
+		String remainder = input.substring(i+1, input.length()-1);
+		int j = remainder.indexOf(",");
 		String startDate = input.substring(i+1, j-1);
 		String endDate = input.substring(j+1, input.length()-1);
 		
-		String sql = "select * from Pallets where cookieName = ? and timeProduced > ? "
-				+ "and timeProduced < ? order by timeProduced asc";
+		String sql = "select * from Pallets where cookieName = ? and timeProduced >= ? "
+				+ "and timeProduced <= ? order by timeProduced asc";
 		PreparedStatement ps = null;
 		try {
+			ps = conn.prepareStatement(sql);
 			ps.setString(1, cookieName);
 			ps.setString(2, startDate);
 			ps.setString(3, endDate);
-			ps = conn.prepareStatement(sql);
 			ResultSet rs = ps.executeQuery();
 			return rs;
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
-			try {
-				ps.close();
-			} catch (SQLException e2) {
-				// ... can do nothing if things go wrong here.
-			}
+//			try {
+//				ps.close();
+//			} catch (SQLException e2) {
+//			}
 		}
 		return null;
 	}
@@ -186,10 +204,31 @@ public class Database {
 		Database db = new Database();
 		db.establishConnection();
 		db.getCookies();
-		for (int i = 0; i < cookies.size(); i++) {
-			System.out.println(cookies.get(i));
+		String[][] test = db.searchByCookie("Nut ring");
+		if(test == null) {
+			System.out.println("!sad");
 		}
-//		db.terminateConnection();
+		for(int j = 0; j < 4; j++) {
+			for(int i = 0; i < 4; i++) {
+				System.out.print(test[j][i] + " | ");
+			}			
+			System.out.println("");
+		}
+		
+//		ResultSet rs = db.searchByTime("Nut Ring,2016-04-03 11:00:00,2016-04-03 11:00:00");
+//		ArrayList<String> test = new ArrayList<String>();
+//	
+//		while(rs.next()) {
+//			test.add(rs.getString(1));
+//		}
+//		if (rs == null) {
+//			System.out.println("set is null");
+//		}
+//		rs.next();
+//		System.out.println(rs.getString(1));
+//			
+		
+		db.terminateConnection();
 	}
 	
 	
