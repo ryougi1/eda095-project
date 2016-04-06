@@ -1,8 +1,6 @@
 package database;
 
 import java.sql.*;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import database.Database;
@@ -14,19 +12,20 @@ public class Database {
 	private static final String PASS = "nli423ww";
 
 	private Connection conn = null;
-	private String sql;
-	private static ArrayList<String> cookies;
+	private ArrayList<String> cookies;
 
 	public Database() throws ClassNotFoundException, SQLException {
 		Class.forName(JDBC_DRIVER); //Register JDBC drivers
 		cookies = new ArrayList<String>();
+		establishConnection();
+		getCookies();
 	}
 	
 	/**
 	 * Establishes connection.
 	 * @throws SQLException
 	 */
-	public void establishConnection() throws SQLException {
+	private void establishConnection() throws SQLException {
 		conn = DriverManager.getConnection(DB_URL, USER, PASS);
 		if(conn != null) {
 			System.out.println("Connected.");			
@@ -37,7 +36,7 @@ public class Database {
 	 * Terminates connection.
 	 * @throws SQLException
 	 */
-	public void terminateConnection() throws SQLException {
+	private void terminateConnection() throws SQLException {
 		conn.close();
 		System.out.println("Connection terminated.");
 	}
@@ -45,7 +44,7 @@ public class Database {
 	/**
 	 * Fetch list of cookie names from SQL database.
 	 */
-	public void getCookies() {
+	private void getCookies() {
 		String sql = "select cookieName from Cookies";
 		PreparedStatement ps = null;
 		try {
@@ -71,7 +70,7 @@ public class Database {
 	 * @param input, Search input.
 	 * @return ?
 	 */
-	public ResultSet search(String input) {
+	public String[][] search(String input) {
 		if(input.isEmpty()) {
 			return null;
 		}
@@ -82,11 +81,9 @@ public class Database {
 					return searchByTime(input);
 				}
 			}
-			//return searchByCookie(input);
-			return null;
+			return searchByCookie(input);
 		} else {
-//			return searchByBarcode(input);
-			return null;
+			return searchByBarcode(input);
 		}
 	}
 	
@@ -171,13 +168,13 @@ public class Database {
 	 * @param input, Search input.
 	 * @return
 	 */
-	private ResultSet searchByTime(String input) {
+	private String[][] searchByTime(String input) {
 		int i = input.indexOf(",");
-		String cookieName = input.substring(0, i-1);
-		String remainder = input.substring(i+1, input.length()-1);
+		String cookieName = input.substring(0, i);
+		String remainder = input.substring(i+1, input.length());
 		int j = remainder.indexOf(",");
-		String startDate = input.substring(i+1, j-1);
-		String endDate = input.substring(j+1, input.length()-1);
+		String startDate = remainder.substring(0, j);
+		String endDate = remainder.substring(j+1, remainder.length());
 		
 		String sql = "select * from Pallets where cookieName = ? and timeProduced >= ? "
 				+ "and timeProduced <= ? order by timeProduced asc";
@@ -188,43 +185,42 @@ public class Database {
 			ps.setString(2, startDate);
 			ps.setString(3, endDate);
 			ResultSet rs = ps.executeQuery();
-			return rs;
+			
+			rs.last();
+			int rows = rs.getRow();
+			rs.beforeFirst();
+			String[][] result = new String[rows][4];
+			j = 0;
+			while(rs.next()) {
+				for(i = 1; i < 5; i++) {
+					result[j][i-1] = rs.getString(i);	
+				}
+				j++;
+			}
+			return result;
+			
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
-//			try {
-//				ps.close();
-//			} catch (SQLException e2) {
-//			}
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+			}
 		}
 		return null;
 	}
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		Database db = new Database();
-		db.establishConnection();
-		db.getCookies();
-		String[][] test = db.searchByCookie("Nut ring");
+		
+		String[][] test = db.search("Nut ring,2016-04-03 11:00:00,2016-04-03 11:16:00");
 
 		for(int j = 0; j < test.length; j++) {
 			for(int i = 0; i < 4; i++) {
 				System.out.print(test[j][i] + " | ");
 			}			
 			System.out.println("");
-		}
-		
-//		ResultSet rs = db.searchByTime("Nut Ring,2016-04-03 11:00:00,2016-04-03 11:00:00");
-//		ArrayList<String> test = new ArrayList<String>();
-//	
-//		while(rs.next()) {
-//			test.add(rs.getString(1));
-//		}
-//		if (rs == null) {
-//			System.out.println("set is null");
-//		}
-//		rs.next();
-//		System.out.println(rs.getString(1));
-//			
+		}		
 		
 		db.terminateConnection();
 	}
