@@ -1,6 +1,8 @@
 package database;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import database.Database;
@@ -274,17 +276,14 @@ public class Database {
 		return 0;
 	}
 	
-	public boolean unblockPalletByBarcode(int barcode) {
+	public int unblockPalletByBarcode(int barcode) {
 		String sql = "DELETE FROM blockedpallets WHERE barcode = ?";
 		PreparedStatement ps = null;
 		
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, barcode);
-			int result = ps.executeUpdate();
-			if (result == 1) {
-				return true;
-			}
+			return ps.executeUpdate();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
@@ -293,11 +292,40 @@ public class Database {
 			} catch (SQLException e2) {
 			}
 		}
-		return false;
+		return 0;
+	}
+	
+	public int createPallet(String cookie, String location) {
+		if (!cookies.contains(cookie)) {
+			System.out.println("Can not create unknown cookie. Please verify that the cookie name is correct");
+			return 0;
+		}
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+		String datetime = LocalDateTime.now().format(formatter);	
+		String sql = "INSERT INTO pallets values(null, ?, ?, ?)";
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, datetime);
+			ps.setString(2, cookie);
+			ps.setString(3, location);
+			return ps.executeUpdate();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+			}
+		}
+		return 0;
 	}
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		Database db = new Database();
+		System.out.println(db.createPallet("Tango", "abstract freezer"));
+		System.out.println(db.createPallet("dettabordeintefunka", "abstract freezer"));
+
 		
 //		db.blockPalletByTime("2016-04-03 11:00:00", "2016-04-03 11:15:00");
 //		ArrayList<Integer> blocked = db.getBlockedPallets();
