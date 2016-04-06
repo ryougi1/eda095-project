@@ -112,10 +112,10 @@ public class Database {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cookie);
 			ResultSet rs = ps.executeQuery();
-//			rs.last();
-//			int rows = rs.getRow();
-//			rs.beforeFirst();
-			String[][] result = new String[4][4];
+			rs.last();
+			int rows = rs.getRow();
+			rs.beforeFirst();
+			String[][] result = new String[rows][4];
 			int j = 0;
 			while(rs.next()) {
 				for(int i = 1; i < 5; i++) {
@@ -205,10 +205,8 @@ public class Database {
 		db.establishConnection();
 		db.getCookies();
 		String[][] test = db.searchByCookie("Nut ring");
-		if(test == null) {
-			System.out.println("!sad");
-		}
-		for(int j = 0; j < 4; j++) {
+
+		for(int j = 0; j < test.length; j++) {
 			for(int i = 0; i < 4; i++) {
 				System.out.print(test[j][i] + " | ");
 			}			
