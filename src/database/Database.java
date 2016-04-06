@@ -173,8 +173,8 @@ public class Database {
 		String cookieName = input.substring(0, i);
 		String remainder = input.substring(i+1, input.length());
 		int j = remainder.indexOf(",");
-		String startDate = remainder.substring(0, j);
-		String endDate = remainder.substring(j+1, remainder.length());
+		String start = remainder.substring(0, j);
+		String end = remainder.substring(j+1, remainder.length());
 		
 		String sql = "select * from Pallets where cookieName = ? and timeProduced >= ? "
 				+ "and timeProduced <= ? order by timeProduced asc";
@@ -182,8 +182,8 @@ public class Database {
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, cookieName);
-			ps.setString(2, startDate);
-			ps.setString(3, endDate);
+			ps.setString(2, start);
+			ps.setString(3, end);
 			ResultSet rs = ps.executeQuery();
 			
 			rs.last();
@@ -210,17 +210,131 @@ public class Database {
 		return null;
 	}
 	
+	public ArrayList<Integer> getBlockedPallets() {
+		ArrayList<Integer> blockedPallets = new ArrayList<Integer>();
+		String sql = "SELECT barcode FROM blockedpallets";
+		PreparedStatement ps = null;
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				blockedPallets.add(rs.getInt("barcode"));
+			}
+			return blockedPallets;
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+			}
+		}
+		return null;
+	}
+	
+	public int blockPalletByBarcode(int barcode) {
+		String sql = "INSERT INTO blockedpallets VALUES (?)";
+		PreparedStatement ps = null;
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, barcode);
+			return ps.executeUpdate();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+			}
+		}
+		return 0;
+	}
+	
+	public int blockPalletByTime(String startDatetime, String endDatetime) {
+		String sql = "INSERT INTO blockedpallets "
+				+ "SELECT barcode FROM pallets "
+				+ "WHERE timeProduced >= ? "
+				+ "and timeProduced <= ?";
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, startDatetime);
+			ps.setString(2, endDatetime);
+			return ps.executeUpdate();
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+			}
+		}
+		return 0;
+	}
+	
+	public boolean unblockPalletByBarcode(int barcode) {
+		String sql = "DELETE FROM blockedpallets WHERE barcode = ?";
+		PreparedStatement ps = null;
+		
+		try {
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, barcode);
+			int result = ps.executeUpdate();
+			if (result == 1) {
+				return true;
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+			}
+		}
+		return false;
+	}
+	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		Database db = new Database();
 		
-		String[][] test = db.search("Nut ring,2016-04-03 11:00:00,2016-04-03 11:16:00");
-
-		for(int j = 0; j < test.length; j++) {
-			for(int i = 0; i < 4; i++) {
-				System.out.print(test[j][i] + " | ");
-			}			
-			System.out.println("");
-		}		
+//		db.blockPalletByTime("2016-04-03 11:00:00", "2016-04-03 11:15:00");
+//		ArrayList<Integer> blocked = db.getBlockedPallets();
+//		for (int i : blocked) {
+//			System.out.println("Pallet with barcode " + String.valueOf(i) + " is blocked");
+//		}
+//		for (int i = 1; i <= 3; i++) {
+//			db.unblockPalletByBarcode(i);
+//		}
+		
+//		String[][] test = db.search("Nut ring,2016-04-03 11:00:00,2016-04-03 11:16:00");
+//		for(int j = 0; j < test.length; j++) {
+//			for(int i = 0; i < 4; i++) {
+//				System.out.print(test[j][i] + " | ");
+//			}			
+//			System.out.println("");
+//		}		
+		
+//		ArrayList<Integer> blocked = db.getBlockedPallets();
+//		System.out.println("1 and 2 should be blocked:");
+//		for (int i : blocked) {
+//			System.out.println("Pallet with barcode " + String.valueOf(i) + " is blocked");
+//		}
+//		System.out.println("\n");
+//		db.unblockPalletByBarcode(1);
+//		blocked = db.getBlockedPallets();
+//		System.out.println("2 should be blocked:");
+//		for (int i : blocked) {
+//			System.out.println("Pallet with barcode " + String.valueOf(i) + " is blocked");
+//		}
+//		System.out.println("\n");
+//		db.blockPalletByBarcode(1);
+//		blocked = db.getBlockedPallets();
+//		System.out.println("1 and 2 should be blocked:");
+//		for (int i : blocked) {
+//			System.out.println("Pallet with barcode " + String.valueOf(i) + " is blocked");
+//		}
 		
 		db.terminateConnection();
 	}
