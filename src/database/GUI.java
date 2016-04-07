@@ -1,8 +1,6 @@
 package database;
 
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,10 +10,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Circle;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.scene.image.Image;
+
+
 
 
 
@@ -35,6 +34,9 @@ public class GUI extends Application{
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		primaryStage.setTitle("Cookie Production");
+		
+		primaryStage.getIcons().add(new Image("file:icon.jpg"));
+		
 		primaryStage.setMinHeight(200);
 		primaryStage.setMinWidth(200);
 		
