@@ -1,18 +1,28 @@
 package database;
 
+
+import java.io.IOException;
+
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import javafx.scene.image.Image;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+
 
 
 
@@ -49,9 +59,35 @@ public class GUI extends Application{
 		
 		Button helpButton = new Button("?");
 		helpButton.setShape(new Circle(1));
+		helpButton.setOnAction(new EventHandler<ActionEvent>() {
+			
+            @Override
+            public void handle(ActionEvent event) {
+            	Alert alert = new Alert(AlertType.INFORMATION);
+            	alert.setTitle("Search Information");
+            	alert.setHeaderText(null);
+            	alert.setContentText("Available search inputs: \n"
+            			+ "*Search by cookie name by writing part of the cookies name. \n"
+            			+ "*Search by pallet barcode by writing the barcode number. \n"
+            			+ " *Search by cookie name and time by writing in the following format: \n"
+            			+ "\"cookieName,YYYY-MM-DD HH:MI:SS,YYYY-MM-DD HH:MI:SS\"\n"
+            			+ "where the first date is start date and the second is end date, no extra blankspaces is allowed.\n\n"
+            			+ "Rows marked in read are blocked pallets.");
+            	
+//            	alert.setResizable(true);
+            	alert.getDialogPane().setPrefSize(1200,560);
+            	alert.showAndWait();
+            }
+        });
 		
 		Button blockButton = new Button("Block pallets");
 		blockButton.setAlignment(Pos.CENTER_RIGHT);
+		blockButton.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+			        
+			   }
+		});
 		
 		HBox hb = new HBox();
 		hb.setAlignment(Pos.CENTER_LEFT);
