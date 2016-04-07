@@ -2,6 +2,7 @@ package database;
 
 
 import java.io.IOException;
+import java.util.Locale;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -31,6 +32,7 @@ import javafx.event.EventHandler;
 public class GUI extends Application{
 	
 	private Database db;
+	private Label search;
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -43,6 +45,7 @@ public class GUI extends Application{
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
+		Locale.setDefault(Locale.US);
 		primaryStage.setTitle("Cookie Production");
 		
 		primaryStage.getIcons().add(new Image("file:icon.jpg"));
@@ -52,7 +55,7 @@ public class GUI extends Application{
 		
 		BorderPane border = new BorderPane();
 		
-		Label search = new Label("Search: ");
+		search = new Label("Search: ");
 		
 		TextField searchField = new TextField();
 		searchField.setPrefWidth(400);
@@ -85,7 +88,6 @@ public class GUI extends Application{
 		blockButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-			        
 			   }
 		});
 		
@@ -103,7 +105,7 @@ public class GUI extends Application{
 		
 		border.setTop(hb);
 		Scene scene = new Scene(border, 800, 600);
-		primaryStage.setScene(scene);;
+		primaryStage.setScene(scene);
 		primaryStage.show();
 		
 		
