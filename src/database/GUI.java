@@ -110,14 +110,19 @@ public class GUI extends Application {
 		primaryStage.setScene(scene);
 		primaryStage.show();
 		drawInfoGrid(null);
-		// String[][] input = new String[100][4];
-		// for(int i = 0; i < input.length; i++){
-		// for(int j = 0; j < input[0].length; j++){
-		// input[i][j] = "Hej hej hallå";
-		// }
-		// }
-		// drawInfoGrid(input);
+//		testInfoGrid();
 
+	}
+
+	private void testInfoGrid() {
+
+		String[][] input = new String[100][4];
+		for (int i = 0; i < input.length; i++) {
+			for (int j = 0; j < input[0].length; j++) {
+				input[i][j] = "Hej hej hallå";
+			}
+		}
+		drawInfoGrid(input);
 	}
 
 	private void drawInfoGrid(String[][] input) {
