@@ -19,14 +19,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.scene.paint.Color;
+import java.util.ArrayList;
 
 public class GUI extends Application {
 
@@ -86,10 +87,10 @@ public class GUI extends Application {
                 info.setText(
                         "Available search inputs: \n" + "*Search by cookie name by writing part of the cookies name. \n"
                                 + "*Search by pallet barcode by writing the barcode number. \n"
-                                + " *Search by cookie name and time by writing in the following format: \n"
+                                + "*Search by cookie name and time by writing in the following format: \n"
                                 + "\"cookieName,YYYY-MM-DD HH:MI:SS,YYYY-MM-DD HH:MI:SS\"\n"
                                 + "where the first date is start date and the second is end date, no extra blankspaces is allowed.\n\n"
-                                + "Rows marked in red are blocked pallets.\n"
+                                + "Rows marked in red are blocked pallets.\n\n"
                                 + "Cookies currently in database: "
                                 + db.getCookieList());
                 scroll.setContent(info);
@@ -127,16 +128,8 @@ public class GUI extends Application {
             @Override
             public void handle(KeyEvent ke)
             {
-                if (ke.getCode().equals(KeyCode.ENTER))
-                {
-
-                    String[][] output = db.search(searchField.getText());
-
-                    drawInfoGrid(output);
-
-
-
-
+                if (ke.getCode().equals(KeyCode.ENTER)) {
+                    drawInfoGrid(db.search(searchField.getText()));
                 }
             }
         });
@@ -196,16 +189,24 @@ public class GUI extends Application {
         grid.getChildren().addAll(Barcode, Cookie, Time, Location);
 
         if (input != null) {
+            ArrayList<Integer> blockedPallets = db.getBlockedPallets();
             for (int i = 0; i < input.length; i++) {
+                int barCode = Integer.parseInt(input[i][0]);
                 for (int j = 0; j < input[0].length; j++) {
                     l = new Label(input[i][j]);
-                    GridPane.setConstraints(l, j, i + 1);
-                    grid.getChildren().add(l);
+                    if(blockedPallets.contains(barCode)){
+                        Pane p = new Pane();
+                        p.getChildren().add(l);
+                        p.setBackground(new Background(new BackgroundFill(Color.RED, CornerRadii.EMPTY, Insets.EMPTY)));
+                        GridPane.setConstraints(p, j, i + 1);
+                        grid.getChildren().add(p);
+                    } else {
+                        GridPane.setConstraints(l, j, i + 1);
+                        grid.getChildren().add(l);
+                    }
                 }
             }
         }
-
-
         scroll.setContent(grid);
     }
 
