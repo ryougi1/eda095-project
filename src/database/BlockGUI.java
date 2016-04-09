@@ -19,6 +19,11 @@ import javafx.stage.Stage;
 public class BlockGUI extends Application {
 	private DatePicker startDate;
 	private DatePicker endDate;
+
+	public BlockGUI() {
+		launch(new String[0]);
+	}
+
 	
 	public static void main(String[] args) {
 		launch(args);
@@ -48,7 +53,7 @@ public class BlockGUI extends Application {
 		vb.setAlignment(Pos.CENTER_LEFT);
 		vb.getChildren().addAll(startDate, endDate);
 		
-		Scene scene = new Scene(layout, 800, 600);
+		Scene scene = new Scene(vb, 800, 600);
 		stage.setScene(scene);
 		stage.show();
 
