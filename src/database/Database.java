@@ -295,36 +295,76 @@ public class Database {
 		return 0;
 	}
 	
+	//Returns 
+	// Positive number on successful pallet creation, otherwise
+	// -1 if cookie is unknown
+	// -2 if not enough ingredients
+	// -3 if it somehow manages to get to the last line.
 	public int createPallet(String cookie, String location) {
 		if (!cookies.contains(cookie)) {
-			System.out.println("Can not create unknown cookie. Please verify that the cookie name is correct");
-			return 0;
+			return -1;
+		} 
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		String sql = "SELECT ingredientName, amount, amountinstorage "
+				+ "FROM recipes NATURAL JOIN ingredients "
+				+ "WHERE cookieName = ? ";
+		try {
+			conn.setAutoCommit(false);
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, cookie);
+			rs = ps.executeQuery();
+			while (rs.next()) {
+				if (rs.getInt("amount") > rs.getInt("amountinstorage")) {
+					return -2;
+				} 
+				sql = "UPDATE ingredients SET amountinstorage = amountinstorage - ? WHERE ingredientName = ?";
+				ps = conn.prepareStatement(sql);
+				ps.setInt(1, rs.getInt("amount"));
+				ps.setString(2, rs.getString("ingredientName"));
+				ps.executeUpdate();
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
+				
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
 		String datetime = LocalDateTime.now().format(formatter);	
-		String sql = "INSERT INTO pallets values(null, ?, ?, ?)";
-		PreparedStatement ps = null;
+		sql = "INSERT INTO pallets values(null, ?, ?, ?)";
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, datetime);
 			ps.setString(2, cookie);
 			ps.setString(3, location);
+			conn.commit();
 			return ps.executeUpdate();
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
 			try {
+				conn.setAutoCommit(true);
 				ps.close();
 			} catch (SQLException e2) {
 			}
 		}
-		return 0;
+		return -3;
 	}
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		Database db = new Database();
+		
 		System.out.println(db.createPallet("Tango", "abstract freezer"));
 		System.out.println(db.createPallet("dettabordeintefunka", "abstract freezer"));
+		
+//		ResultSet test = db.test("Amneris");
+//		while (test.next()) {
+//			if (test.getInt("amount") < test.getInt("amountinstorage")) {
+//				System.out.println(test.getString("ingredientName"));
+//				System.out.println(test.getInt("amount"));
+//				System.out.println(test.getInt("amountinstorage"));
+//			}
+//		}
+		
 
 		
 //		db.blockPalletByTime("2016-04-03 11:00:00", "2016-04-03 11:15:00");
