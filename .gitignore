@@ -11,6 +11,10 @@ local.properties
 .settings/
 .loadpath
 .recommenders
+# Intellij
+.idea/
+*.iml
+*.iws
 
 # Intellij
 .idea/
