@@ -40,17 +40,17 @@ public class GUI extends Application {
 
 
 
-    public static void main(String[] args) {
-
-        try {
-            db = new Database();
-        } catch (ClassNotFoundException e){
-            e.printStackTrace();
-        } catch (SQLException e){
-            e.printStackTrace();
-        }
-        launch(args);
-    }
+//    public static void main(String[] args) {
+//
+//        try {
+//            db = new Database();
+//        } catch (ClassNotFoundException e){
+//            e.printStackTrace();
+//        } catch (SQLException e){
+//            e.printStackTrace();
+//        }
+//        launch(args);
+//    }
 
 //     public GUI (String[] args) throws ClassNotFoundException, SQLException {
 //     db = new Database();
@@ -59,6 +59,8 @@ public class GUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        db = new Database();
+
         Locale.setDefault(Locale.US);
         primaryStage.setTitle("Cookie Production");
         primaryStage.setMinHeight(200);
