@@ -216,7 +216,7 @@ public class Database {
 	}
 	
 	private String[][] searchBlockedPallets() {
-		String sql = "select * from blockedpallets order by timeProduced asc";
+		String sql = "select * from blockedpallets natural join pallets order by timeProduced asc";
 		PreparedStatement ps = null;
 		try {
 			ps = conn.prepareStatement(sql);
@@ -443,7 +443,7 @@ public class Database {
 //			db.unblockPalletByBarcode(i);
 //		}
 		
-		String[][] test = db.getAllPallets();
+		String[][] test = db.search("blocked");
 		for(int j = 0; j < test.length; j++) {
 			for(int i = 0; i < 4; i++) {
 				System.out.print(test[j][i] + " | ");
