@@ -5,17 +5,15 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -73,6 +71,28 @@ public class GUI extends Application {
         scroll = new ScrollPane();
         scroll.setContent(grid);
         search = new Label("Search: ");
+        HBox palletCreator = new HBox();
+
+        ObservableList<String> options =
+                FXCollections.observableArrayList(
+                        "Almond delight",
+                        "Amneris",
+                        "Berliner",
+                        "Nut cookie",
+                        "Nut ring",
+                        "Tango"
+                );
+        final ComboBox comboBox = new ComboBox(options);
+        Button createPallet = new Button("Create Pallet");
+
+        createPallet.setOnAction(e -> {
+            db.createPallet(comboBox.getValue().toString(), "Freezer");
+        });
+
+        palletCreator.getChildren().addAll(comboBox, createPallet);
+        palletCreator.setAlignment(Pos.BOTTOM_RIGHT);
+        palletCreator.setPadding(new Insets(10, 10, 10, 10));
+        palletCreator.setSpacing(5);
 
         TextField searchField = new TextField();
         searchField.setPrefWidth(400);
@@ -119,6 +139,8 @@ public class GUI extends Application {
 
         border.setTop(hb);
         border.setCenter(scroll);
+
+        border.setBottom(palletCreator);
         Scene scene = new Scene(border, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
