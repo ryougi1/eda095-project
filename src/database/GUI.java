@@ -166,21 +166,23 @@ public class GUI extends Application {
         grid.setPadding(new Insets(10, 10, 10, 10));
         grid.setHgap(8);
         grid.setVgap(10);
+        boolean flag = false;
+        Label l = null;
 
         if(input == null){
-            Label l = new Label("No result found, please check your input");
+            l = new Label("No result found, please check your input");
+            flag = true;
+        } else if  (input.length == 0){
+            l = new Label("No such cookies currently in store");
+            flag = true;
+        }
+        if(flag){
             GridPane.setConstraints(l, 1, 0);
             grid.getChildren().add(l);
             scroll.setContent(grid);
             return;
         }
-        if(input.length == 0){
-            Label l = new Label("No such cookies currently in store");
-            GridPane.setConstraints(l, 1, 0);
-            grid.getChildren().add(l);
-            scroll.setContent(grid);
-            return;
-        }
+
         Label Barcode = new Label("Barcode");
         Label Cookie = new Label("Cookie");
         Label Time = new Label("Time");
@@ -194,7 +196,7 @@ public class GUI extends Application {
         if (input != null) {
             for (int i = 1; i < input.length; i++) {
                 for (int j = 0; j < input[0].length; j++) {
-                    Label l = new Label(input[i][j]);
+                    l = new Label(input[i][j]);
                     GridPane.setConstraints(l, j, i);
                     grid.getChildren().add(l);
                 }
