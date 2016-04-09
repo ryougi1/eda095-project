@@ -190,16 +190,16 @@ public class GUI extends Application {
         Label Time = new Label("Time");
         Label Location = new Label("Location");
         GridPane.setConstraints(Barcode, 0, 0);
-        GridPane.setConstraints(Cookie, 1, 0);
-        GridPane.setConstraints(Time, 2, 0);
+        GridPane.setConstraints(Time, 1, 0);
+        GridPane.setConstraints(Cookie, 2, 0);
         GridPane.setConstraints(Location, 3, 0);
         grid.getChildren().addAll(Barcode, Cookie, Time, Location);
 
         if (input != null) {
-            for (int i = 1; i < input.length; i++) {
+            for (int i = 0; i < input.length; i++) {
                 for (int j = 0; j < input[0].length; j++) {
-                    l = new Label(input[i-1][j]);
-                    GridPane.setConstraints(l, j, i);
+                    l = new Label(input[i][j]);
+                    GridPane.setConstraints(l, j, i + 1);
                     grid.getChildren().add(l);
                 }
             }

@@ -74,7 +74,7 @@ public class Database {
 	 */
 	public String[][] search(String input) {
 		if(input.isEmpty()) {
-			return null;
+			return getAllPallets();
 		}
 		char first = input.charAt(0);
 		if(!Character.isDigit(first)) {
