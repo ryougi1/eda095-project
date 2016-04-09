@@ -76,6 +76,9 @@ public class Database {
 		if(input.isEmpty()) {
 			return getAllPallets();
 		}
+		if(input.toLowerCase().equals("blocked")) {
+			return searchBlockedPallets();
+		}
 		char first = input.charAt(0);
 		if(!Character.isDigit(first)) {
 			for(char c : input.toCharArray()) {
@@ -212,6 +215,36 @@ public class Database {
 		return null;
 	}
 	
+	private String[][] searchBlockedPallets() {
+		String sql = "select * from blockedpallets order by timeProduced asc";
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			rs.last();
+			int rows = rs.getRow();
+			rs.beforeFirst();
+			String[][] result = new String[rows][4];
+			int j = 0;
+			while(rs.next()) {
+				for(int i = 1; i < 5; i++) {
+					result[j][i-1] = rs.getString(i);	
+				}
+				j++;
+			}
+			return result;
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+				// ... can do nothing if things go wrong here.
+			}
+		}
+		return null;
+	}
+	
 	public String[][] getAllPallets(){
 		String sql = "select * from Pallets order by timeProduced asc";
 		PreparedStatement ps = null;
@@ -241,7 +274,7 @@ public class Database {
 		}
 		return null;
 	}
-	
+
 	public ArrayList<Integer> getBlockedPallets() {
 		ArrayList<Integer> blockedPallets = new ArrayList<Integer>();
 		String sql = "SELECT barcode FROM blockedpallets";
