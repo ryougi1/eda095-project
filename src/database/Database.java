@@ -349,6 +349,10 @@ public class Database {
 		}
 		return -3;
 	}
+
+    public String getCookieList(){
+        return cookies.toString();
+    }
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		Database db = new Database();
