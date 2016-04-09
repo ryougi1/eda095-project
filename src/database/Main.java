@@ -1,17 +1,10 @@
 package database;
 
 import java.sql.SQLException;
+import javafx.application.Application;
 
 public class Main {
-
 	public static void main(String[] args) {
-		try {
-			Database db = new Database();
-//			GUI gui = new GUI(db);
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-		}
-
+		Application.launch(GUI.class, args);
 	}
-
 }

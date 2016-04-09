@@ -34,8 +34,8 @@ public class BlockGUI extends Application {
 		
 		stage.getIcons().add(new Image("file:icon.jpg"));
 		
-		stage.setMinHeight(200);
-		stage.setMinWidth(200);
+		stage.setMinHeight(400);
+		stage.setMinWidth(400);
 		
 		GridPane layout = new GridPane();
 		layout.setPadding(new Insets(20, 0, 20, 20));
