@@ -22,31 +22,34 @@ public class BlockGUI extends Application {
 	private DatePicker startDate;
 	private DatePicker endDate;
 	private Button block;
-	
+
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+
 	@Override
 	public void start(Stage stage) throws Exception {
 		Locale.setDefault(Locale.US);
 		stage.setTitle("Block pallets");
-		
+
 		stage.getIcons().add(new Image("file:icon.jpg"));
 		
 		stage.setMinHeight(400);
 		stage.setMinWidth(400);
-		
+
+		stage.setMinHeight(400);
+		stage.setMinWidth(400);
+
 		GridPane layout = new GridPane();
 		layout.setPadding(new Insets(20, 0, 20, 20));
 		layout.setHgap(7);
 		layout.setVgap(7);
-		
+
 		Label title = new Label("Select which cookie and during what time intervall to block.");
-		
+
 		startDate = new DatePicker();
 		endDate = new DatePicker();
-		
+
 		RestrictiveTextField hour = new RestrictiveTextField();
 		hour.prefWidth(1);
 		hour.maxWidth(1);
@@ -59,8 +62,7 @@ public class BlockGUI extends Application {
 		
 		block = new Button("Block");
 		Button cancel = new Button("Cancel");
-		
-		
+
 		layout.add(new Label("Start "),0,1);
 		layout.add(startDate, 1, 1);
 		layout.add(hour, 2, 1);
@@ -68,11 +70,14 @@ public class BlockGUI extends Application {
 		layout.add(min, 4, 1);
 		layout.add(new Label("End "),0,2);
 		layout.add(endDate, 1, 2);
+
 //		layout.add(block, 2, 4);
 //		layout.add(cancel, 3, 4);
-		
+
 		Scene scene = new Scene(layout, 800, 600);
 		stage.setScene(scene);
 		stage.show();
 	}
 }
+
+
