@@ -198,7 +198,7 @@ public class GUI extends Application {
         if (input != null) {
             for (int i = 1; i < input.length; i++) {
                 for (int j = 0; j < input[0].length; j++) {
-                    l = new Label(input[i][j]);
+                    l = new Label(input[i-1][j]);
                     GridPane.setConstraints(l, j, i);
                     grid.getChildren().add(l);
                 }

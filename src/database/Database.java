@@ -142,7 +142,7 @@ public class Database {
 	 */
 	private String[][] searchByBarcode(String input) {
 		String[][] result = new String[1][4];
-		String sql = "select * from Pallets where barcode = ? order by timeProduced asc";
+		String sql = "select * from Pallets where barcode = ? ";
 		PreparedStatement ps = null;
 		try {
 			ps = conn.prepareStatement(sql);
@@ -207,6 +207,36 @@ public class Database {
 			try {
 				ps.close();
 			} catch (SQLException e2) {
+			}
+		}
+		return null;
+	}
+	
+	public String[][] getAllPallets(){
+		String sql = "select * from Pallets order by timeProduced asc";
+		PreparedStatement ps = null;
+		try {
+			ps = conn.prepareStatement(sql);
+			ResultSet rs = ps.executeQuery();
+			rs.last();
+			int rows = rs.getRow();
+			rs.beforeFirst();
+			String[][] result = new String[rows][4];
+			int j = 0;
+			while(rs.next()) {
+				for(int i = 1; i < 5; i++) {
+					result[j][i-1] = rs.getString(i);	
+				}
+				j++;
+			}
+			return result;
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		} finally {
+			try {
+				ps.close();
+			} catch (SQLException e2) {
+				// ... can do nothing if things go wrong here.
 			}
 		}
 		return null;
@@ -357,8 +387,8 @@ public class Database {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		Database db = new Database();
 		
-		System.out.println(db.createPallet("Tango", "abstract freezer"));
-		System.out.println(db.createPallet("dettabordeintefunka", "abstract freezer"));
+//		System.out.println(db.createPallet("Nut ring", "abstract freezer"));
+//		System.out.println(db.createPallet("dettabordeintefunka", "abstract freezer"));
 		
 //		ResultSet test = db.test("Amneris");
 //		while (test.next()) {
@@ -380,13 +410,13 @@ public class Database {
 //			db.unblockPalletByBarcode(i);
 //		}
 		
-//		String[][] test = db.search("Nut ring,2016-04-03 11:00:00,2016-04-03 11:16:00");
-//		for(int j = 0; j < test.length; j++) {
-//			for(int i = 0; i < 4; i++) {
-//				System.out.print(test[j][i] + " | ");
-//			}			
-//			System.out.println("");
-//		}		
+		String[][] test = db.getAllPallets();
+		for(int j = 0; j < test.length; j++) {
+			for(int i = 0; i < 4; i++) {
+				System.out.print(test[j][i] + " | ");
+			}			
+			System.out.println("");
+		}		
 		
 //		ArrayList<Integer> blocked = db.getBlockedPallets();
 //		System.out.println("1 and 2 should be blocked:");
