@@ -85,7 +85,6 @@ public class BlockStage extends Stage {
 			@Override
 			public void handle(ActionEvent event) {
 				Alert warning = new Alert(AlertType.WARNING);
-				warning.setTitle("Warning");
 				warning.setContentText("Invalid Date or Time input!");
 				boolean invalid = false;
 				
