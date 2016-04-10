@@ -23,7 +23,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class BlockStage extends Stage {
-//	private Database db;
 	private DatePicker startDate;
 	private DatePicker endDate;
 
@@ -86,6 +85,8 @@ public class BlockStage extends Stage {
 			public void handle(ActionEvent event) {
 				Alert warning = new Alert(AlertType.WARNING);
 				warning.setContentText("Invalid Date or Time input!");
+				Alert success = new Alert(AlertType.INFORMATION
+				success.setContentText("Pallets successfully blocked!");
 				boolean invalid = false;
 				
 				String startDateTime = new String();
@@ -117,7 +118,6 @@ public class BlockStage extends Stage {
 					}
 					startDateTime = startDate.getValue().toString()
 							+ " " + startHour + ":" + startMin;
-					System.out.println(startDateTime);
 				} else {
 					invalid = true;
 				}
@@ -150,13 +150,13 @@ public class BlockStage extends Stage {
 					}
 					endDateTime = endDate.getValue().toString()
 							+ " " + endHour + ":" + endMin;
-					System.out.println(endDateTime);
 				} else {
 					invalid = true;
 				}
 				if(!invalid){
 					db.blockPalletByTime(startDateTime, endDateTime);	
-					System.out.println("Perfect!");
+					success.showAndWait();
+					close();
 				} else {
 					warning.showAndWait();
 				}
@@ -184,7 +184,6 @@ public class BlockStage extends Stage {
 		layout.setBottom(hb);
 		Scene scene = new Scene(layout, 800, 600);
 		setScene(scene);
-		show();
 	}
 }
 

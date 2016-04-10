@@ -121,7 +121,7 @@ public class GUI extends Application {
 				scroll.setContent(info);
 			}
 		});
-
+		
 		Button blockButton = new Button("Block pallets");
 		blockButton.setAlignment(Pos.CENTER_RIGHT);
 		blockButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -134,7 +134,8 @@ public class GUI extends Application {
 					e.printStackTrace();
 				}
 				if(block != null) {
-					block.show();					
+					block.showAndWait();
+					drawInfoGrid(db.search(""));
 				}
 			}
 		});
