@@ -85,7 +85,7 @@ public class BlockStage extends Stage {
 			public void handle(ActionEvent event) {
 				Alert warning = new Alert(AlertType.WARNING);
 				warning.setContentText("Invalid Date or Time input!");
-				Alert success = new Alert(AlertType.INFORMATION
+				Alert success = new Alert(AlertType.INFORMATION);
 				success.setContentText("Pallets successfully blocked!");
 				boolean invalid = false;
 				

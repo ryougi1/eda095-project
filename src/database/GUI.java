@@ -139,7 +139,6 @@ public class GUI extends Application {
 				}
 			}
 		});
-
 		HBox hb = new HBox();
 		hb.setAlignment(Pos.CENTER_LEFT);
 		hb.setPadding(new Insets(15, 12, 15, 12));
