@@ -301,7 +301,7 @@ public class Database {
 	public int blockPalletByBarcode(int barcode) {
 		String sql = "INSERT INTO blockedpallets VALUES (?)";
 		PreparedStatement ps = null;
-		
+
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setInt(1, barcode);
@@ -318,16 +318,19 @@ public class Database {
 	}
 	
 	public int blockPalletByTime(String startDatetime, String endDatetime) {
-		String sql = "INSERT INTO blockedpallets "
-				+ "SELECT barcode FROM pallets "
-				+ "WHERE timeProduced >= ? "
-				+ "and timeProduced <= ?";
+		ArrayList<Integer> blockedPallets = getBlockedPallets();
+		String sql = "SELECT barcode FROM pallets WHERE timeProduced >= ? and timeProduced <= ?";
 		PreparedStatement ps = null;
 		try {
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, startDatetime);
 			ps.setString(2, endDatetime);
-			return ps.executeUpdate();
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				if (!blockedPallets.contains(rs.getInt("barcode"))) {
+					blockPalletByBarcode(rs.getInt("barcode"));
+				}
+			}
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		} finally {
@@ -338,26 +341,7 @@ public class Database {
 		}
 		return 0;
 	}
-	
-	public int unblockPalletByBarcode(int barcode) {
-		String sql = "DELETE FROM blockedpallets WHERE barcode = ?";
-		PreparedStatement ps = null;
-		
-		try {
-			ps = conn.prepareStatement(sql);
-			ps.setInt(1, barcode);
-			return ps.executeUpdate();
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		} finally {
-			try {
-				ps.close();
-			} catch (SQLException e2) {
-			}
-		}
-		return 0;
-	}
-	
+
 	//Returns 
 	// Positive number on successful pallet creation, otherwise
 	// -1 if cookie is unknown
