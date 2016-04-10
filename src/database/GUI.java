@@ -86,8 +86,11 @@ public class GUI extends Application {
         Button createPallet = new Button("Create Pallet");
 
         createPallet.setOnAction(e -> {
-            System.out.println(comboBox.getValue().toString());
-            db.createPallet(comboBox.getValue().toString(), "Freezer");
+            if(comboBox.getValue()!=null) {
+                System.out.println(comboBox.getValue().toString());
+                db.createPallet(comboBox.getValue().toString(), "Freezer");
+                drawInfoGrid(db.search(""));
+            }
         });
 
         palletCreator.getChildren().addAll(comboBox, createPallet);
