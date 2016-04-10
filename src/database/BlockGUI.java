@@ -19,9 +19,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class BlockGUI extends Application {
-	private DatePicker startDate;
-	private DatePicker endDate;
-	private Button block;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -34,46 +31,63 @@ public class BlockGUI extends Application {
 
 		stage.getIcons().add(new Image("file:icon.jpg"));
 		
-		stage.setMinHeight(400);
-		stage.setMinWidth(400);
-
-		stage.setMinHeight(400);
-		stage.setMinWidth(400);
-
-		GridPane layout = new GridPane();
-		layout.setPadding(new Insets(20, 0, 20, 20));
-		layout.setHgap(7);
-		layout.setVgap(7);
+		stage.setHeight(350);
+		stage.setWidth(1400);
+		stage.setResizable(false);
+		
+		BorderPane layout = new BorderPane();
+		
+		GridPane grid = new GridPane();
+		grid.setPadding(new Insets(20, 0, 20, 20));
+		grid.setHgap(7);
+		grid.setVgap(7);
 
 		Label title = new Label("Select which cookie and during what time intervall to block.");
 
-		startDate = new DatePicker();
-		endDate = new DatePicker();
+		DatePicker startDate = new DatePicker();
+		DatePicker endDate = new DatePicker();
 
-		RestrictiveTextField hour = new RestrictiveTextField();
-		hour.prefWidth(1);
-		hour.maxWidth(1);
-		hour.setMaxLength(2);
-		hour.setRestrict("[0-9]");
-		RestrictiveTextField min = new RestrictiveTextField();
-		min.setMaxLength(2);
-		min.setRestrict("[0-9]");
+		RestrictiveTextField startHour = new RestrictiveTextField();
+		startHour.setMaxLength(2);
+		startHour.setRestrict("[0-9]");
+		startHour.setPromptText("Hour");
+		RestrictiveTextField startMin = new RestrictiveTextField();
+		startMin.setMaxLength(2);
+		startMin.setRestrict("[0-9]");
+		startMin.setPromptText("Minute");
+		
+		RestrictiveTextField endHour = new RestrictiveTextField();
+		endHour.setMaxLength(2);
+		endHour.setRestrict("[0-9]");
+		endHour.setPromptText("Hour");
+		RestrictiveTextField endMin = new RestrictiveTextField();
+		endMin.setMaxLength(2);
+		endMin.setRestrict("[0-9]");
+		endMin.setPromptText("Minute");
 		
 		
-		block = new Button("Block");
+		Button block = new Button("Block");
 		Button cancel = new Button("Cancel");
 
-		layout.add(new Label("Start "),0,1);
-		layout.add(startDate, 1, 1);
-		layout.add(hour, 2, 1);
-		layout.add(new Label(":"), 3, 1);
-		layout.add(min, 4, 1);
-		layout.add(new Label("End "),0,2);
-		layout.add(endDate, 1, 2);
-
-//		layout.add(block, 2, 4);
-//		layout.add(cancel, 3, 4);
-
+		grid.add(new Label("Start "),0,1);
+		grid.add(startDate, 1, 1);
+		grid.add(startHour, 2, 1);
+		grid.add(new Label(":"), 3, 1);
+		grid.add(startMin, 4, 1);
+		grid.add(new Label("End "),0,2);
+		grid.add(endDate, 1, 2);
+		grid.add(endHour, 2, 2);
+		grid.add(new Label(":"), 3, 2);
+		grid.add(endMin, 4, 2);
+		
+		HBox hb = new HBox();
+		hb.setAlignment(Pos.CENTER);
+		hb.setSpacing(15);
+		hb.getChildren().add(block);
+		hb.getChildren().add(cancel);
+		
+		layout.setCenter(grid);
+		layout.setBottom(hb);
 		Scene scene = new Scene(layout, 800, 600);
 		stage.setScene(scene);
 		stage.show();

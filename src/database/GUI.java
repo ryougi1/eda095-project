@@ -123,6 +123,7 @@ public class GUI extends Application {
         blockButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+            	
             }
         });
 
@@ -172,7 +173,7 @@ public class GUI extends Application {
         String[][] input = new String[100][4];
         for (int i = 0; i < input.length; i++) {
             for (int j = 0; j < input[0].length; j++) {
-                input[i][j] = "Hej hej hallå";
+                input[i][j] = "Hej hej hallï¿½";
             }
         }
         drawInfoGrid(input);
