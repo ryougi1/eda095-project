@@ -68,7 +68,8 @@ public class BlockGUI extends Application {
 		
 		Button block = new Button("Block");
 		Button cancel = new Button("Cancel");
-
+		
+		
 		grid.add(new Label("Start "),0,1);
 		grid.add(startDate, 1, 1);
 		grid.add(startHour, 2, 1);
@@ -80,12 +81,16 @@ public class BlockGUI extends Application {
 		grid.add(new Label(":"), 3, 2);
 		grid.add(endMin, 4, 2);
 		
+		HBox top = new HBox();
+		top.setAlignment(Pos.CENTER);
+		top.getChildren().add(title);
+		
 		HBox hb = new HBox();
 		hb.setAlignment(Pos.CENTER);
 		hb.setSpacing(15);
-		hb.getChildren().add(block);
-		hb.getChildren().add(cancel);
+		hb.getChildren().addAll(block, cancel);
 		
+		layout.setTop(top);
 		layout.setCenter(grid);
 		layout.setBottom(hb);
 		Scene scene = new Scene(layout, 800, 600);
