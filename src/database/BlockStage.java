@@ -153,7 +153,15 @@ public class BlockStage extends Stage {
 				} else {
 					invalid = true;
 				}
-				if(!invalid){
+				if(!invalid && startDate.getValue().isBefore(endDate.getValue())) {
+					db.blockPalletByTime(startDateTime, endDateTime);	
+					success.showAndWait();
+					close();
+				} else if(!invalid && startDate.getValue().equals(endDate.getValue()) && startH < endH) {
+					db.blockPalletByTime(startDateTime, endDateTime);	
+					success.showAndWait();
+					close();
+				} else if(!invalid && startDate.getValue().equals(endDate.getValue()) && startH == endH && startM <= endM) {
 					db.blockPalletByTime(startDateTime, endDateTime);	
 					success.showAndWait();
 					close();
