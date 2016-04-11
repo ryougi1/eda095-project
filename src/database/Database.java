@@ -298,7 +298,7 @@ public class Database {
 		return null;
 	}
 	
-	public int blockPalletByBarcode(int barcode) {
+	private int blockPalletByBarcode(int barcode) {
 		String sql = "INSERT INTO blockedpallets VALUES (?)";
 		PreparedStatement ps = null;
 

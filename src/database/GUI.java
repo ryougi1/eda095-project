@@ -39,23 +39,6 @@ public class GUI extends Application {
 	private Stage primaryStage;
 	private GridPane grid;
 	private ScrollPane scroll;
-
-	// public static void main(String[] args) {
-	//
-	// try {
-	// db = new Database();
-	// } catch (ClassNotFoundException e){
-	// e.printStackTrace();
-	// } catch (SQLException e){
-	// e.printStackTrace();
-	// }
-	// launch(args);
-	// }
-
-	// public GUI (String[] args) throws ClassNotFoundException, SQLException {
-	// db = new Database();
-	// launch(args);
-	// }
 	
 	public static void main (String [] args) {
 		launch(args);
@@ -189,29 +172,8 @@ public class GUI extends Application {
 				} else {
 					event.consume();
 				}
-
 			}
 		});
-
-		// searchField.getOnKeyPressed(new EventHandler<KeyEvent>() {
-		// @Override
-		// public void handle(KeyEvent ke) {
-		// if (ke.getCode().equals(KeyCode.ENTER)) {
-		// db.search(searchField.getText());
-		// }
-		// }
-		// });
-	}
-
-	private void testInfoGrid() {
-
-		String[][] input = new String[100][4];
-		for (int i = 0; i < input.length; i++) {
-			for (int j = 0; j < input[0].length; j++) {
-				input[i][j] = "Hej hej hall�";
-			}
-		}
-		drawInfoGrid(input);
 	}
 
 	private void drawInfoGrid(String[][] input) {
