@@ -25,8 +25,10 @@ import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.paint.Color;
+import javafx.stage.WindowEvent;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class GUI extends Application {
 
@@ -165,6 +167,29 @@ public class GUI extends Application {
 				if (ke.getCode().equals(KeyCode.ENTER)) {
 					drawInfoGrid(db.search(searchField.getText()));
 				}
+			}
+		});
+
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent event) {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Confirm Exit");
+				alert.setHeaderText("Do you really want to exit?");
+				alert.setContentText("Are you sure?");
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK){
+					try {
+						db.closeConnection();
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					primaryStage.close();
+				} else {
+					event.consume();
+				}
+
 			}
 		});
 

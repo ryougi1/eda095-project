@@ -401,4 +401,7 @@ public class Database {
         return cookies.toString();
     }
 
+	public void closeConnection() throws SQLException {
+		conn.close();
+	}
 }
