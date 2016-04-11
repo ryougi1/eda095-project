@@ -38,7 +38,7 @@ public class Database {
 	 * Terminates connection.
 	 * @throws SQLException
 	 */
-	private void terminateConnection() throws SQLException {
+	public void terminateConnection() throws SQLException {
 		conn.close();
 		System.out.println("Connection terminated.");
 	}
@@ -400,8 +400,4 @@ public class Database {
     public String getCookieList(){
         return cookies.toString();
     }
-
-	public void closeConnection() throws SQLException {
-		conn.close();
-	}
 }

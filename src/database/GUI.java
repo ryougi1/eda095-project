@@ -164,7 +164,7 @@ public class GUI extends Application {
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == ButtonType.OK){
 					try {
-						db.closeConnection();
+						db.terminateConnection();
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
